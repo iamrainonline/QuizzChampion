@@ -1,6 +1,7 @@
 import express from "express";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
+import getPosts from "./routes/getPosts.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -16,9 +17,11 @@ app.use(cors(corsConfig));
 app.use(express.json());
 app.use(cookieParser());
 
-// routes
+// routes POST
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
+// routes GET
+app.use("/api/", getPosts);
 
 app.listen(8800, () => {
    console.log("connected express PORT:", 8800, " [Success]");

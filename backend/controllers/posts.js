@@ -1,8 +1,11 @@
 import { db } from "../db.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 
 export const createPost = (req, res) => {
-   console.log("the post has been created");
-   res.send("test from posting BE").req.body;
+   const q = "INSERT INTO posts(`comment`, `userId`) VALUES (?)";
+   const values = [req.body.comment, req.body.userId];
+
+   db.query(q, [values], (err, data) => {
+      if (err) return res.json(err);
+      return res.json("User has been created");
+   });
 };
