@@ -21,11 +21,27 @@ export const deletePost = (req, res) => {
 
       const q = "DELETE FROM posts WHERE `id` = ? AND `userId` = ?";
       db.query(q, [postId, userInfo.id], (err, data) => {
-         console.log(data);
          if (data.affectedRows === 0) {
             return res.status(403).json("You can delete only your post!");
          }
          return res.json("Post has been deleted");
+      });
+   });
+};
+
+export const updatePost = (req, res) => {
+   const token = req.cookies.jwt;
+   if (!token) return res.status(401).json("Not authenticated");
+
+   jwt.verify(token, "SecretKey", (err, userInfo) => {
+      if (err) return res.status(403).json("Token is not valid!");
+
+      const q = "UPDATE posts SET `comment`=? WHERE `id` = ? AND `userId` = ?";
+      const values = req.body.data.post;
+
+      db.query(q, [values, req.body.data.postId, userInfo.id], (err, data) => {
+         if (err) return res.status(500).json(err);
+         return res.json("Post has been updated");
       });
    });
 };
