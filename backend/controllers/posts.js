@@ -2,7 +2,8 @@ import { db } from "../db.js";
 import jwt from "jsonwebtoken";
 
 export const getPosts = (req, res) => {
-   const q = "SELECT * FROM posts ORDER BY id DESC";
+   const q =
+      "SELECT * FROM posts P INNER JOIN users U on P.userId = U.id order by P.id DESC";
 
    db.query(q, (err, data) => {
       if (err) return res.json(err);
@@ -11,8 +12,14 @@ export const getPosts = (req, res) => {
 };
 
 export const createPost = (req, res) => {
-   const q = "INSERT INTO posts(`title`,`content`, `userId`) VALUES (?)";
-   const values = [req.body.title, req.body.content, req.body.userId];
+   const q =
+      "INSERT INTO posts(`title`,`content`,  `category`,`userId`) VALUES (?)";
+   const values = [
+      req.body.title,
+      req.body.content,
+      req.body.category,
+      req.body.userId,
+   ];
 
    db.query(q, [values], (err, data) => {
       if (err) return res.json(err);
